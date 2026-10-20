@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 import "./index.css";
 import RoommatePanel from "./RoommatePanel";
-const API = "/api";
 import RoomBookingPanel from "./RoomBookingPanel";
+
+const API = "/api";
 type Student = {
   id: string;
   roll_number: string;
@@ -188,37 +189,6 @@ export default function App() {
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Something went wrong.",
-      );
-    } finally {
-      setSubmitting(false);
-    }
-  }
-
-  async function handleDemoLogin(demoRollNumber: string) {
-    setError("");
-    setNotice("");
-    setSubmitting(true);
-
-    try {
-      const data = await request("/auth/login", {
-        method: "POST",
-        body: JSON.stringify({
-          roll_number: demoRollNumber,
-          password: "Demo@12345",
-        }),
-      });
-
-      if (!data.student) {
-        throw new Error("Student details were missing from the response.");
-      }
-
-      setStudent(data.student);
-      setNotice("Demo login successful.");
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Demo login failed. Please try again.",
       );
     } finally {
       setSubmitting(false);
@@ -538,42 +508,6 @@ export default function App() {
                   : "Create account →"}
             </button>
           </form>
-
-          {mode === "login" && (
-            <div className="demo-login-section">
-              <div className="demo-divider"><span>OR TRY A DEMO</span></div>
-              <h3>Just exploring?</h3>
-              <p>Enter quickCLKT using a sample student account.</p>
-
-              <button
-                type="button"
-                className="demo-login-button"
-                onClick={() => handleDemoLogin("DEMO001")}
-                disabled={submitting}
-              >
-                <span className="demo-login-icon" aria-hidden="true">👨‍🎓</span>
-                <span className="demo-login-copy">
-                  <strong>Demo Student 1</strong>
-                  <small>Explore the student dashboard</small>
-                </span>
-                <span className="demo-login-arrow" aria-hidden="true">→</span>
-              </button>
-
-              <button
-                type="button"
-                className="demo-login-button"
-                onClick={() => handleDemoLogin("DEMO002")}
-                disabled={submitting}
-              >
-                <span className="demo-login-icon" aria-hidden="true">👨‍🎓</span>
-                <span className="demo-login-copy">
-                  <strong>Demo Student 2</strong>
-                  <small>Explore the roommate workflow</small>
-                </span>
-                <span className="demo-login-arrow" aria-hidden="true">→</span>
-              </button>
-            </div>
-          )}
 
           <p className="security-note">
             Passwords are hashed on the server.
