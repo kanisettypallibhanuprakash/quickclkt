@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 
-const API = "/api/auth/login";
+const API = "/api";
 
 type Room = {
   room_number: number;
