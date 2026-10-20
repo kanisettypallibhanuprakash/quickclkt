@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 
-const API = "http://localhost:8000";
+const API = "/api/auth/login";
 
 type Room = {
   room_number: number;

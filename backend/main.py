@@ -311,6 +311,46 @@ def get_db():
 def hash_password(password: str) -> str:
     return password_hasher.hash(password)
 
+def seed_demo_students(db: Session):
+    demo_students = [
+        {
+            "roll_number": "DEMO001",
+            "name": "Demo Student One",
+            "email": "demo001@example.com",
+            "hostel": "Ashwatha",
+            "password": "Demo@12345",
+        },
+        {
+            "roll_number": "DEMO002",
+            "name": "Demo Student Two",
+            "email": "demo002@example.com",
+            "hostel": "Ashwatha",
+            "password": "Demo@12345",
+        },
+    ]
+
+    for data in demo_students:
+        existing = (
+            db.query(Student)
+            .filter(Student.roll_number == data["roll_number"])
+            .first()
+        )
+
+        if existing:
+            continue
+
+        student = Student(
+            roll_number=data["roll_number"],
+            name=data["name"],
+            email=data["email"],
+            hostel=data["hostel"],
+            password_hash=hash_password(data["password"]),
+            is_verified=True,
+        )
+
+        db.add(student)
+
+    db.commit()
 
 def verify_password(password: str, stored_hash: str) -> bool:
     return password_hasher.verify(password, stored_hash)
@@ -498,9 +538,9 @@ def get_validated_roommate_group(
 async def lifespan(app: FastAPI):
     Base.metadata.create_all(bind=engine)
 
-    # Initialize 14 floors and 40 rooms per floor per hostel.
-    # Existing rooms and bookings are preserved.
     with SessionLocal() as db:
+        # Initialize 14 floors and 40 rooms per floor per hostel.
+        # Existing rooms and bookings are preserved.
         for hostel_name in sorted(HOSTELS):
             for floor in range(1, 15):
                 for room_number in range(1, 41):
@@ -521,10 +561,10 @@ async def lifespan(app: FastAPI):
                             )
                         )
 
+
         db.commit()
 
     yield
-
 
 # =========================================================
 # 7. CREATE APPLICATION

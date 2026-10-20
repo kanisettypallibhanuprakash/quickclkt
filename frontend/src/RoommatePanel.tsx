@@ -1,7 +1,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-const API = "http://localhost:8000";
+const API = "/api/auth/login";
 
 type StudentSummary = {
   id: string;

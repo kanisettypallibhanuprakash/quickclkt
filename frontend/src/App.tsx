@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 import "./index.css";
 import RoommatePanel from "./RoommatePanel";
-const API = "http://localhost:8000";
+const API = "/api/auth/login";
 import RoomBookingPanel from "./RoomBookingPanel";
 type Student = {
   id: string;
@@ -44,7 +44,7 @@ async function request(
     });
   } catch {
     throw new Error(
-      "Cannot connect to the server. Make sure the backend is running at http://localhost:8000.",
+      "Cannot connect to the server. Make sure the backend is running at /api/auth/login.",
     );
   }
 
