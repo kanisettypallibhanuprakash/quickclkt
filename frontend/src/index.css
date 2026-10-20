@@ -786,3 +786,92 @@ footer {
     flex-direction: column;
   }
 }
+
+.demo-login-section {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.demo-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #888;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+.demo-divider::before,
+.demo-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #d1d5db;
+}
+
+.demo-login-section h3 {
+  margin: 4px 0 0;
+  text-align: center;
+  font-size: 18px;
+}
+
+.demo-login-section > p {
+  margin: 0 0 6px;
+  text-align: center;
+  color: #777;
+  font-size: 13px;
+}
+
+.demo-login-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.demo-login-button:hover:not(:disabled) {
+  border-color: #2563eb;
+  background: rgba(37, 99, 235, 0.05);
+}
+
+.demo-login-button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.demo-login-icon {
+  font-size: 25px;
+}
+
+.demo-login-copy {
+  flex: 1;
+}
+
+.demo-login-copy strong,
+.demo-login-copy small {
+  display: block;
+}
+
+.demo-login-copy strong {
+  font-size: 14px;
+}
+
+.demo-login-copy small {
+  margin-top: 4px;
+  color: #777;
+  font-size: 12px;
+}
+
+.demo-login-arrow {
+  font-size: 20px;
+}
