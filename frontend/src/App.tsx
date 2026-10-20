@@ -45,7 +45,7 @@ async function request(
     });
   } catch {
     throw new Error(
-      "Cannot connect to the server. Make sure the backend is running at /api/auth/login.",
+      "Cannot connect to the server. Please check the backend deployment.",
     );
   }
 
@@ -512,6 +512,40 @@ export default function App() {
           <p className="security-note">
             Passwords are hashed on the server.
           </p>
+
+          {mode === "login" && (
+            <div className="demo-login-box" style={{ marginTop: 20, padding: 16, border: "1px solid #dbe5f0", borderRadius: 14, background: "#f8fafc" }}>
+              <h3 style={{ margin: "0 0 6px", fontSize: 16 }}>Try the demo accounts</h3>
+              <p style={{ margin: "0 0 12px", color: "#64748b", fontSize: 13 }}>
+                Use either account to explore the quickCLKT dashboard. Click a button to fill the login form.
+              </p>
+              <div style={{ display: "grid", gap: 10 }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", padding: 12, borderRadius: 10, background: "white", border: "1px solid #e2e8f0" }}>
+                  <div>
+                    <strong>Demo Student 1</strong>
+                    <div style={{ fontSize: 13, color: "#64748b" }}>Roll number: DEMO001</div>
+                    <div style={{ fontSize: 13, color: "#64748b" }}>Password: Demo@12345</div>
+                  </div>
+                  <button type="button" className="secondary-button" onClick={() => { setRollNumber("DEMO001"); setPassword("Demo@12345"); setError(""); setNotice("Demo Student 1 credentials filled. Click Log in to continue."); }}>
+                    Use account
+                  </button>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", padding: 12, borderRadius: 10, background: "white", border: "1px solid #e2e8f0" }}>
+                  <div>
+                    <strong>Demo Student 2</strong>
+                    <div style={{ fontSize: 13, color: "#64748b" }}>Roll number: DEMO002</div>
+                    <div style={{ fontSize: 13, color: "#64748b" }}>Password: Demo@12345</div>
+                  </div>
+                  <button type="button" className="secondary-button" onClick={() => { setRollNumber("DEMO002"); setPassword("Demo@12345"); setError(""); setNotice("Demo Student 2 credentials filled. Click Log in to continue."); }}>
+                    Use account
+                  </button>
+                </div>
+              </div>
+              <p style={{ margin: "12px 0 0", color: "#92400e", fontSize: 12 }}>
+                Demo accounts must exist in the database before these credentials can log in.
+              </p>
+            </div>
+          )}
         </section>
       </section>
 
