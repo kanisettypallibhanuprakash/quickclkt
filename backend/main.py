@@ -658,6 +658,19 @@ def login(
         )
     )
 
+    # Self-heal demo accounts if the deployment did not seed them at startup.
+    # This fallback applies only to the two explicitly public demo accounts.
+    if data.roll_number in {"DEMO001", "DEMO002"} and (
+        student is None
+        or not verify_password(data.password, student.password_hash)
+    ):
+        seed_demo_students(db)
+        student = db.scalar(
+            select(Student).where(
+                Student.roll_number == data.roll_number
+            )
+        )
+
     if student is None or not verify_password(
         data.password, student.password_hash
     ):
