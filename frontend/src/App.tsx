@@ -80,6 +80,23 @@ async function request(
 }
 
 export default function App() {
+  // Remove tracking parameters such as ?utm_source=chatgpt.com from the address bar.
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    let changed = false;
+
+    for (const key of [...url.searchParams.keys()]) {
+      if (key.toLowerCase().startsWith("utm_")) {
+        url.searchParams.delete(key);
+        changed = true;
+      }
+    }
+
+    if (changed) {
+      const cleanUrl = url.pathname + url.search + url.hash;
+      window.history.replaceState(window.history.state, "", cleanUrl);
+    }
+  }, []);
   const [mode, setMode] = useState<"login" | "register">("login");
   const [student, setStudent] = useState<Student | null>(null);
   const [loading, setLoading] = useState(true);
