@@ -312,43 +312,64 @@ def hash_password(password: str) -> str:
     return password_hasher.hash(password)
 
 def seed_demo_students(db: Session):
+    """Create or refresh the two public demo accounts safely."""
     demo_students = [
         {
             "roll_number": "DEMO001",
-            "name": "Demo Student One",
+            "full_name": "Demo Student One",
             "email": "demo001@example.com",
-            "hostel": "Ashwatha",
+            "academic_year": 2,
+            "course": "B.Tech CSE",
+            "mobile_number": "9000000001",
+            "hostel_name": "Ashwatha",
             "password": "Demo@12345",
         },
         {
             "roll_number": "DEMO002",
-            "name": "Demo Student Two",
+            "full_name": "Demo Student Two",
             "email": "demo002@example.com",
-            "hostel": "Ashwatha",
+            "academic_year": 2,
+            "course": "B.Tech CSE",
+            "mobile_number": "9000000002",
+            "hostel_name": "Ashwatha",
             "password": "Demo@12345",
         },
     ]
 
     for data in demo_students:
-        existing = (
-            db.query(Student)
-            .filter(Student.roll_number == data["roll_number"])
-            .first()
+        student = db.scalar(
+            select(Student).where(Student.roll_number == data["roll_number"])
         )
 
-        if existing:
-            continue
-
-        student = Student(
-            roll_number=data["roll_number"],
-            name=data["name"],
-            email=data["email"],
-            hostel=data["hostel"],
-            password_hash=hash_password(data["password"]),
-            is_verified=True,
-        )
-
-        db.add(student)
+        if student is None:
+            email_owner = db.scalar(
+                select(Student).where(Student.email == data["email"])
+            )
+            if email_owner is not None:
+                # Avoid overwriting a different student's account.
+                continue
+            student = Student(
+                roll_number=data["roll_number"],
+                full_name=data["full_name"],
+                email=data["email"],
+                academic_year=data["academic_year"],
+                course=data["course"],
+                mobile_number=data["mobile_number"],
+                hostel_name=data["hostel_name"],
+                password_hash=hash_password(data["password"]),
+                is_verified=True,
+            )
+            db.add(student)
+        else:
+            # Keep demo credentials usable if a previous seed was incomplete.
+            student.full_name = data["full_name"]
+            student.email = data["email"]
+            student.academic_year = data["academic_year"]
+            student.course = data["course"]
+            student.mobile_number = data["mobile_number"]
+            student.hostel_name = data["hostel_name"]
+            student.password_hash = hash_password(data["password"])
+            student.is_verified = True
 
     db.commit()
 
@@ -539,6 +560,8 @@ async def lifespan(app: FastAPI):
     Base.metadata.create_all(bind=engine)
 
     with SessionLocal() as db:
+        seed_demo_students(db)
+
         # Initialize 14 floors and 40 rooms per floor per hostel.
         # Existing rooms and bookings are preserved.
         for hostel_name in sorted(HOSTELS):
